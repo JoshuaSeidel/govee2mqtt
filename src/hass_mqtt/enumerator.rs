@@ -174,6 +174,25 @@ pub async fn enumerate_entities_for_device<'a>(
         }
     }
 
+    // For thermometers and sensors without Platform API data, still create a device entry
+    // so they appear in Home Assistant even if we don't have full capability information yet
+    if d.http_device_info.is_none() {
+        if matches!(
+            d.device_type(),
+            DeviceType::Thermometer | DeviceType::Sensor
+        ) {
+            log::info!(
+                "Device {} is a {} but has no Platform API data. \
+                 It will appear in Home Assistant but may have limited functionality until \
+                 Platform API data is available.",
+                d,
+                d.device_type()
+            );
+            // At minimum, the device will have the status diagnostic sensor from line 157
+            return Ok(());
+        }
+    }
+
     if let Some(info) = &d.http_device_info {
         for cap in &info.capabilities {
             match &cap.kind {
