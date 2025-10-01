@@ -1,4 +1,5 @@
 use crate::hass_mqtt::base::{Device, EntityConfig, Origin};
+use crate::hass_mqtt::binary_sensor::AlarmEventSensor;
 use crate::hass_mqtt::button::ButtonConfig;
 use crate::hass_mqtt::climate::TargetTemperatureEntity;
 use crate::hass_mqtt::humidifier::Humidifier;
@@ -182,9 +183,15 @@ pub async fn enumerate_entities_for_device<'a>(
                 DeviceCapabilityKind::ColorSetting
                 | DeviceCapabilityKind::SegmentColorSetting
                 | DeviceCapabilityKind::MusicSetting
-                | DeviceCapabilityKind::Event
                 | DeviceCapabilityKind::Mode
                 | DeviceCapabilityKind::DynamicScene => {}
+
+                DeviceCapabilityKind::Event => {
+                    // Handle alarm/event capabilities as binary sensors
+                    if cap.alarm_type.is_some() || cap.event_state.is_some() {
+                        entities.add(AlarmEventSensor::new(&d, state, cap).await?);
+                    }
+                }
 
                 DeviceCapabilityKind::Range if cap.instance == "brightness" => {}
                 DeviceCapabilityKind::Range if cap.instance == "humidity" => {}

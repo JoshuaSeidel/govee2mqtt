@@ -19,5 +19,6 @@ limitation of Govee2MQTT, but a limitation of the hardware itself.
 |Humidifiers|Not supported by these devices|Most humidifiers are controllable via the Platform API, but the level of control can be patchy; some models cannot have their night lights controlled fully at this time due to bugs on Govee's side.|Only the H7160 at this time. It allows control over the night light|
 |Kettles|Not supported by these devices|Tested with H7171 and H7173|No|
 |Heaters, Fans, Purifiers|Not supported by these devices|Tested with H7101, H7102, H7111, H7121, H7130, H7131, H713A, H7135|No|
+|Thermometers|Not supported by these devices|Tested with H5051, H5100, H5103, H5108, H5179. These devices provide temperature and humidity readings, and may include alarm notifications for threshold alerts.|No|
 |Plugs|Not supported by these devices|Yes, but the API is buggy and support may be limited. ([H5082](https://github.com/wez/govee2mqtt/issues/65))|No|
 
