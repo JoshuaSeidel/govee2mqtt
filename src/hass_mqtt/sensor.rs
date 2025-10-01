@@ -134,6 +134,24 @@ impl CapabilitySensor {
             "sensorTemperature" => "Temperature".to_string(),
             "sensorHumidity" => "Humidity".to_string(),
             "online" => "Connected to Govee Cloud".to_string(),
+            "lowBatteryEvent" => "Low Battery".to_string(),
+            "lackWaterEvent" => "Water Level".to_string(),
+            s if s.ends_with("Event") => {
+                // Convert camelCase Event names to readable format
+                s.trim_end_matches("Event")
+                    .chars()
+                    .enumerate()
+                    .flat_map(|(i, c)| {
+                        if i > 0 && c.is_uppercase() {
+                            vec![' ', c]
+                        } else if i == 0 {
+                            vec![c.to_ascii_uppercase()]
+                        } else {
+                            vec![c]
+                        }
+                    })
+                    .collect::<String>()
+            }
             _ => instance.instance.to_string(),
         };
 
